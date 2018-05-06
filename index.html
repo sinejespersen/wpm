@@ -9,13 +9,13 @@
   <script src='https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore.js'></script>
 </head>
 
-<body>
+<body id="body">
 
-  <h1>Test af skrivehastighed</h1>
-  <p>Den første sætning der skal skrives er:</p>
-  <p id="sentence"></p>
+  <h1 tabindex="1">Test af skrivehastighed</h1>
+  <p tabindex="2">Den første sætning der skal skrives er:</p>
+  <p tabindex="3" id="sentence"></p>
 
-  <input id="input" style="width:500px; height: 40px;" type="text" />
+  <input tabindex="4" id="input" style="width:500px; height: 40px;" type="text" />
   <div style="margin-top:30px;">
     <span id="time">00:00</span>
     <span> m:s</span>
@@ -28,10 +28,7 @@
     <span id="words">0</span>
     <span>ord</span>
   </div>
-  <div>
-    <input id="howmany" style="margin:10px 0;width:80px; height: 40px;" type="number" />
-    <button id="startover">Start forfra</button>
-  </div>
+
 
   <p id="result"></p>
   <script>
@@ -52,12 +49,11 @@
 
     // Fields
     const sentenceField = $('#sentence');
-    const startOverField = $('#startover');
-    const howManyField = $('#howmany');
     const inputField = $('#input');
     const wordsField = $('#words');
     const timeField = $('#time');
     const resultsField = $('#result');
+    const bodyField = $('#body');
 
     $.ajax({
       url: 'proverbs.txt',
@@ -67,18 +63,6 @@
         sentenceField.html(getSentence());
       }
     });
-
-    function startOver(howmany) {
-      $.ajax({
-        url: 'proverbs.txt',
-        dataType: 'text',
-        success: function (data) {
-          proverbs = data.split('\n');
-          proverbs = proverbs.splice(0, howmany);
-          sentenceField.html(getSentence());
-        }
-      });
-    }
 
     function changeSentence() {
       sentenceField.html(getSentence());
@@ -95,9 +79,12 @@
       }
     }
 
-
-    startOverField.on('click', function () {
-      startOver(howManyField.val());
+    bodyField.keydown(function (e) {
+      if (e.key.toLowerCase() == 'arrowdown') {
+        inputField.focus();
+      } else if (e.key.toLowerCase() == 'arrowup') {
+        sentenceField.focus();
+      }
     });
 
     $(function () {
@@ -116,10 +103,6 @@
           resultString += '←';
         } else if (e.key.toLowerCase() == 'arrowright') {
           resultString += '→';
-        } else if (e.key.toLowerCase() == 'arrowup') {
-          resultString += '↑';
-        } else if (e.key.toLowerCase() == 'arrowdown') {
-          resultString += '↓';
         } else if (e.key.toLowerCase() == 'enter') {
           enterHasBeenPressed(resultString);
           timeField.html('00:00');
@@ -140,9 +123,9 @@
       resultsField.html(finishedString.replace(/(\r\n|\n|\r)/gm, '<br>'));
       finishedString = encodeURIComponent(finishedString);
       done = true;
-      window.open(
-        `mailto:sinejespersen@gmail.com?subject=WPM&body=${finishedString}`
-      );
+      // window.open(
+      //   `mailto:sinejespersen@gmail.com?subject=WPM&body=${finishedString}`
+      // );
     }
 
 
