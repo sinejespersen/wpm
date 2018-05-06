@@ -38,13 +38,10 @@
 
     let proverbs;
     let done = false;
-    let counter = 0;
     let currentString = '';
     let resultString = '';
-    let arrayOfInputs = [];
     let finishedString = '';
     let timestarted = false;
-    let time = 0;
     let howLongTyped = 0;
     let words = 0;
     let sumSec = 0;
@@ -53,12 +50,21 @@
     let min = 0;
     let refreshIntervalId = 0;
 
+    // Fields
+    const sentenceField = $('#sentence');
+    const startOverField = $('#startover');
+    const howManyField = $('#howmany');
+    const inputField = $('#input');
+    const wordsField = $('#words');
+    const timeField = $('#time');
+    const resultsField = $('#result');
+
     $.ajax({
       url: 'proverbs.txt',
       dataType: 'text',
       success: function (data) {
         proverbs = data.split('\n');
-        $('#sentence').html(getSentence());
+        sentenceField.html(getSentence());
       }
     });
 
@@ -69,13 +75,13 @@
         success: function (data) {
           proverbs = data.split('\n');
           proverbs = proverbs.splice(0, howmany);
-          $('#sentence').html(getSentence());
+          sentenceField.html(getSentence());
         }
       });
     }
 
     function changeSentence() {
-      $('#sentence').html(getSentence());
+      sentenceField.html(getSentence());
     }
 
     function getSentence() {
@@ -89,18 +95,17 @@
       }
     }
 
-    $('#startover').on('click', function () {
-      let howmany = $('#howmany').val();
-      startOver(howmany);
+
+    startOverField.on('click', function () {
+      startOver(howManyField.val());
     });
 
     $(function () {
       if (done) {
         return;
       }
-      $('#input').keydown(function (e) {
+      inputField.keydown(function (e) {
         if (!timestarted) {
-          console.log('sdfsdf');
           startClock();
         }
         if (e.key.length == 1) {
@@ -117,8 +122,8 @@
           resultString += '↓';
         } else if (e.key.toLowerCase() == 'enter') {
           enterHasBeenPressed(resultString);
-          $('#time').html('00:00');
-          $('#words').html(words);
+          timeField.html('00:00');
+          wordsField.html(words);
           resultString = '';
           clearInterval(refreshIntervalId);
           timestarted = false;
@@ -126,14 +131,13 @@
           finishedProcedure();
           return;
         }
-        arrayOfInputs.push(e.timeStamp);
       });
     });
 
     function finishedProcedure() {
       let wpmString = `wpm is ${wpm()}`;
       finishedString = `${wpmString} \n ${finishedString}`;
-      $('#result').html(finishedString.replace(/(\r\n|\n|\r)/gm, '<br>'));
+      resultsField.html(finishedString.replace(/(\r\n|\n|\r)/gm, '<br>'));
       finishedString = encodeURIComponent(finishedString);
       done = true;
       window.open(
@@ -141,12 +145,13 @@
       );
     }
 
+
     function enterHasBeenPressed(result) {
-      howLongTyped = $('#time').html();
-      $('#time').html('');
+      howLongTyped = timeField.html();
+      timeField.html('');
       min = 0;
       sec = 0;
-      let stringFromInput = $('#input').val();
+      let stringFromInput = inputField.val();
       let areThereSpecialCharacters = stringFromInput !== result;
 
       words += parseInt(result.trim().split(/\s+/).length);
@@ -155,7 +160,7 @@
     ${result}, ${stringFromInput}, ${currentString}, ${howLongTyped}, ${areThereSpecialCharacters}, \n`;
 
       changeSentence();
-      $('#input').val('');
+      inputField.val('');
       if (done) {
         finishedProcedure();
       }
