@@ -57,27 +57,121 @@
     const resultsField = $('#result');
     const bodyField = $('#body');
 
-    $.ajax({
-      url: 'proverbs.txt',
-      dataType: 'text',
-      success: function (data) {
-        proverbs = data.split('\n');
+    proverbs = [
+      "mange bække små gør en stor å",
+      "for mange kokke fordærver maden",
+      "nogle bygger læhegn mens andre bygger vindmøller",
+      "saml appetit ude spis hjemme",
+      "slå ikke større brød op end du kan bage",
+      "den der graver en grav for andre falder selv deri",
+      "kært barn har mange navne",
+      "den der kommer først til mølle får først malet",
+      "sæt ikke dit lys under en skæppe",
+      "tro kan flytte bjerge",
+      "man skal ikke kaste med sten når man selv bor i et glashus",
+      "man kan ikke både blæse og have mel i munden",
+      "blind høne kan også finde korn",
+      "den der ler sidst ler bedst",
+      "der er ikke rust på et nyttigt redskab",
+      "tomme tønder buldrer mest",
+      "når katten er ude danser musene på bordet",
+      "gå ikke over åen efter vand",
+      "hop ikke over hvor gærdet er lavest",
+      "hvor der handles der spildes",
+      "krage søger mage",
+      "lige børn leger bedst",
+      "man skal smede mens jernet er varmt",
+      "den som jager to harer får ingen",
+      "almindelig sund fornuft er ikke så almindelig endda",
+      "de fleste selvmord i Danmark begås med kniv og gaffel",
+      "det er sundt at leve sjovt men det er ikke sjovt at leve sundt",
+      "frisk luft gør lægen fattig",
+      "tab og vind med samme sind",
+      "ingen roser uden torne",
+      "gammel kærlighed ruster ikke",
+      "små gryder har også ører",
+      "sælg ikke skindet før bjørnen er skudt",
+      "hvad du ikke ved af har du ikke ondt af",
+      "tyv tror hver mand stjæler",
+      "uden mad og drikke duer helten ikke",
+      "man skal kravle før man kan gå",
+      "tale er sølv tavshed er guld",
+      "af gammelt jern smedes nye våben",
+      "zebraen kan ikke slippe for sine striber",
+      "brændt barn skyr ilden",
+      "den enes død den andens brød",
+      "der hvor kragerne vender",
+      "det skal gøre ondt før det gør godt",
+      "en fugl i hånden er bedre end ti på taget",
+      "fej for egen dør før du fejer for andres",
+      "hastværk er lastværk",
+      "hvor der er vilje er der vej",
+      "i mørket er alle katte grå",
+      "mange bække små gør en stor å ",
+      "for mange kokke fordærver maden ",
+      "nogle bygger læhegn mens andre bygger vindmøller ",
+      "saml appetit ude spis hjemme ",
+      "slå ikke større brød op end du kan bage ",
+      "den der graver en grav for andre falder selv deri ",
+      "kært barn har mange navne ",
+      "den der kommer først til mølle får først malet ",
+      "sæt ikke dit lys under en skæppe ",
+      "tro kan flytte bjerge ",
+      "man skal ikke kaste med sten når man selv bor i et glashus ",
+      "man kan ikke både blæse og have mel i munden ",
+      "blind høne kan også finde korn ",
+      "den der ler sidst ler bedst ",
+      "der er ikke rust på et nyttigt redskab ",
+      "tomme tønder buldrer mest ",
+      "når katten er ude danser musene på bordet ",
+      "gå ikke over åen efter vand ",
+      "hop ikke over hvor gærdet er lavest ",
+      "hvor der handles der spildes ",
+      "krage søger mage ",
+      "lige børn leger bedst ",
+      "man skal smede mens jernet er varmt ",
+      "den som jager to harer får ingen ",
+      "almindelig sund fornuft er ikke så almindelig endda ",
+      "de fleste selvmord i Danmark begås med kniv og gaffel ",
+      "det er sundt at leve sjovt men det er ikke sjovt at leve sundt ",
+      "frisk luft gør lægen fattig ",
+      "fra børn og fulde folk skal man høre sandheden ",
+      "tab og vind med samme sind ",
+      "ingen roser uden torne ",
+      "gammel kærlighed ruster ikke ",
+      "små gryder har også ører ",
+      "sælg ikke skindet før bjørnen er skudt ",
+      "hvad du ikke ved af har du ikke ondt af ",
+      "tyv tror hver mand stjæler ",
+      "uden mad og drikke duer helten ikke ",
+      "man skal kravle før man kan gå ",
+      "tale er sølv tavshed er guld ",
+      "af gammelt jern smedes nye våben ",
+      "zebraen kan ikke slippe for sine striber ",
+      "brændt barn skyr ilden ",
+      "den enes død den andens brød ",
+      "der hvor kragerne vender ",
+      "det skal gøre ondt før det gør godt ",
+      "en fugl i hånden er bedre end ti på taget ",
+      "fej for egen dør før du fejer for andres ",
+      "hastværk er lastværk ",
+      "hvor der er vilje er der vej ",
+      "i mørket er alle katte grå ",
+    ];
 
-      }
-    });
+    sentenceField.html(getSentence());
+    // $.ajax({
+    //   url: 'proverbsWithSigns.txt',
+    //   dataType: 'text',
+    //   success: function (data) {
+    //     proverbsWithSigns = data.split('\n');
+    //     fixProverbs();
 
-    $.ajax({
-      url: 'proverbsWithSigns.txt',
-      dataType: 'text',
-      success: function (data) {
-        proverbsWithSigns = data.split('\n');
-        fixProverbs();
 
-      }
-    });
+    //   }
+    // });
 
     function fixProverbs() {
-      console.log("sfd")
       let arrayOverview = _.map(proverbs, function (num, index) { return { 'sentence': num, 'signed': proverbsWithSigns[index], } });
       sentenceField.html(getSentence());
     }
@@ -97,13 +191,6 @@
       }
     }
 
-    bodyField.keydown(function (e) {
-      if (e.key.toLowerCase() == 'arrowdown') {
-        inputField.focus();
-      } else if (e.key.toLowerCase() == 'arrowup') {
-        sentenceField.focus();
-      }
-    });
 
     $(function () {
       if (done) {
@@ -174,7 +261,7 @@
     function startClock() {
       timestarted = true;
       var handler = function () {
-        if (!done && timestarted) {
+        if (!done && timestarted && inputField.val().length > 0) {
           sumSec++;
           if (++sec === 60) {
             sumMin++;
