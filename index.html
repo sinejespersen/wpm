@@ -34,6 +34,7 @@
   <script>
 
     let proverbs;
+    let proverbsWithSigns;
     let done = false;
     let currentString = '';
     let resultString = '';
@@ -46,6 +47,7 @@
     let sec = 0;
     let min = 0;
     let refreshIntervalId = 0;
+    let arrayOverview;
 
     // Fields
     const sentenceField = $('#sentence');
@@ -60,9 +62,25 @@
       dataType: 'text',
       success: function (data) {
         proverbs = data.split('\n');
-        sentenceField.html(getSentence());
+
       }
     });
+
+    $.ajax({
+      url: 'proverbsWithSigns.txt',
+      dataType: 'text',
+      success: function (data) {
+        proverbsWithSigns = data.split('\n');
+        fixProverbs();
+
+      }
+    });
+
+    function fixProverbs() {
+      console.log("sfd")
+      let arrayOverview = _.map(proverbs, function (num, index) { return { 'sentence': num, 'signed': proverbsWithSigns[index], } });
+      sentenceField.html(getSentence());
+    }
 
     function changeSentence() {
       sentenceField.html(getSentence());
