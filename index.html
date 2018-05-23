@@ -1,4 +1,4 @@
-<html>
+﻿<html>
 
 
 
@@ -10,19 +10,13 @@
 </head>
 
 <body id="body">
-
-  <h1 tabindex="1">Test af skrivehastighed</h1>
-  <p tabindex="2">Den første sætning der skal skrives er:</p>
-  <p tabindex="3" id="sentence"></p>
-
-  <input tabindex="4" id="input" style="width:500px; height: 40px;" type="text" />
+  <p tabindex="1" id="sentence"></p>
+  <input tabindex="2" id="input" style="width:500px; height: 40px;" type="text" />
   <div style="margin-top:30px;">
-    <span id="time">00:00</span>
-    <span> m:s</span>
+    <span id="time">0</span><span> sek</span>
   </div>
   <div>
-    <span id="sumtime">00:00</span>
-    <span> m:s (summeret tid)</span>
+    <span id="sumtime">0</span><span> sek summeret</span>
   </div>
   <div>
     <span id="words">0</span>
@@ -43,11 +37,9 @@
     let howLongTyped = 0;
     let words = 0;
     let sumSec = 0;
-    let sumMin = 0;
-    let sec = 0;
-    let min = 0;
     let refreshIntervalId = 0;
     let arrayOverview;
+    let hasFinished = false;
 
     // Fields
     const sentenceField = $('#sentence');
@@ -205,12 +197,12 @@
         } else if (e.key.toLowerCase() == 'backspace') {
           resultString += '>';
         } else if (e.key.toLowerCase() == 'arrowleft') {
-          resultString += '←';
+          resultString += '{';
         } else if (e.key.toLowerCase() == 'arrowright') {
-          resultString += '→';
+          resultString += '}';
         } else if (e.key.toLowerCase() == 'enter') {
           enterHasBeenPressed(resultString);
-          timeField.html('00:00');
+          timeField.html('0');
           wordsField.html(words);
           resultString = '';
           clearInterval(refreshIntervalId);
@@ -223,6 +215,10 @@
     });
 
     function finishedProcedure() {
+      if (hasFinished) {
+        return;
+      }
+      hasFinished = true
       let wpmString = `wpm is ${wpm()}`;
       finishedString = `${wpmString} \n ${finishedString}`;
       resultsField.html(finishedString.replace(/(\r\n|\n|\r)/gm, '<br>'));
@@ -237,12 +233,10 @@
     function enterHasBeenPressed(result) {
       howLongTyped = timeField.html();
       timeField.html('');
-      min = 0;
-      sec = 0;
       let stringFromInput = inputField.val();
       let areThereSpecialCharacters = stringFromInput !== result;
 
-      words += parseInt(result.trim().split(/\s+/).length);
+      words += parseInt(stringFromInput.trim().split(/\s+/).length);
 
       finishedString += `
     ${result}, ${stringFromInput}, ${currentString}, ${howLongTyped}, ${areThereSpecialCharacters}, \n`;
@@ -255,27 +249,21 @@
     }
 
     function wpm() {
-      return words / (sumMin + sumSec / 60);
+      return words / (sumSec / 60);
     }
 
     function startClock() {
       timestarted = true;
+	sec = 0;
       var handler = function () {
         if (!done && timestarted && inputField.val().length > 0) {
           sumSec++;
-          if (++sec === 60) {
-            sumMin++;
-            sec = 0;
-            sumSec = 0;
-            if (++min === 60) min = 0;
-          }
+          sec++;
           $('#time').html(
-            (min < 10 ? '0' + min : min) + ':' + (sec < 10 ? '0' + sec : sec)
+            sec
           );
           $('#sumtime').html(
-            (sumMin < 10 ? '0' + sumMin : sumMin) +
-            ':' +
-            (sumSec < 10 ? '0' + sumSec : sumSec)
+            sumSec
           );
         }
       };
