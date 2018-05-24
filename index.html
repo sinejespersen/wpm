@@ -12,18 +12,6 @@
 <body id="body">
   <p tabindex="1" id="sentence"></p>
   <input tabindex="2" id="input" style="width:500px; height: 40px;" type="text" />
-  <div style="margin-top:30px;">
-    <span id="time">0</span><span> sek</span>
-  </div>
-  <div>
-    <span id="sumtime">0</span><span> sek summeret</span>
-  </div>
-  <div>
-    <span id="words">0</span>
-    <span>ord</span>
-  </div>
-
-
   <p id="result"></p>
   <script>
 
@@ -36,6 +24,7 @@
     let timestarted = false;
     let howLongTyped = 0;
     let words = 0;
+    let sec = 0;
     let sumSec = 0;
     let refreshIntervalId = 0;
     let arrayOverview;
@@ -231,8 +220,7 @@
 
 
     function enterHasBeenPressed(result) {
-      howLongTyped = timeField.html();
-      timeField.html('');
+      howLongTyped = sec;
       let stringFromInput = inputField.val();
       let areThereSpecialCharacters = stringFromInput !== result;
 
